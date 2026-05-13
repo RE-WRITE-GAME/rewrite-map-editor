@@ -75,7 +75,7 @@ export interface TiledMap {
 }
 
 export type ToolType = 'brush' | 'eraser' | 'fill' | 'object' | 'select';
-export type ObjectType = 'spawn' | 'portal' | 'spawner';
+export type ObjectType = 'spawn' | 'portal' | 'spawner' | 'ramp';
 
 export interface EditorState {
   map: TiledMap | null;

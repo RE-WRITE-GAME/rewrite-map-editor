@@ -38,8 +38,16 @@ export function ObjectPanel({ objects, isObjectLayer, objectType, onSelectObject
 
   const getObjectColor = (obj: TiledObject): string => {
     if (obj.type === 'monster_spawner') return '#ff3232';
+    if (obj.type === 'ramp') return '#ff9900';
     if (obj.name.includes('portal')) return '#3232ff';
     return '#32ff32';
+  };
+
+  const getObjectIcon = (obj: TiledObject): string => {
+    if (obj.type === 'monster_spawner') return 'M';
+    if (obj.type === 'ramp') return '◢';
+    if (obj.name.includes('portal')) return 'P';
+    return 'S';
   };
 
   return (
@@ -47,7 +55,7 @@ export function ObjectPanel({ objects, isObjectLayer, objectType, onSelectObject
       <div className="panel-title">Objects</div>
 
       <div className="object-type-grid">
-        {(['spawn', 'portal', 'spawner'] as ObjectType[]).map((type) => (
+        {(['spawn', 'portal', 'spawner', 'ramp'] as ObjectType[]).map((type) => (
           <button
             key={type}
             className={`tool-btn ${objectType === type ? 'active' : ''}`}
@@ -71,7 +79,7 @@ export function ObjectPanel({ objects, isObjectLayer, objectType, onSelectObject
                 className="obj-icon"
                 style={{ background: getObjectColor(obj), color: '#fff' }}
               >
-                {obj.type === 'monster_spawner' ? 'M' : obj.name.includes('portal') ? 'P' : 'S'}
+                {getObjectIcon(obj)}
               </div>
               <span className="obj-name" onClick={() => startEdit(obj)} style={{ cursor: 'pointer' }}>
                 {obj.name}

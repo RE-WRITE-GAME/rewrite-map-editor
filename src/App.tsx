@@ -111,24 +111,26 @@ export default function App() {
         canRedo={editor.canRedo}
       />
       <div className="main-layout">
-        <div className="left-panel">
-          <LayerPanel
-            layers={editor.getAllLayers()}
-            selectedLayerId={editor.state.selectedLayerId}
-            onSelectLayer={editor.setSelectedLayer}
-            onToggleVisibility={editor.toggleLayerVisibility}
-            onAddLayer={editor.addTileLayer}
-            onRemoveLayer={editor.removeLayer}
-          />
-          <ObjectPanel
-            objects={editor.getObjectsOnSelectedLayer()}
-            isObjectLayer={isObjectLayer}
-            objectType={editor.state.selectedObjectType}
-            onSelectObjectType={editor.setObjectType}
-            onDeleteObject={editor.deleteObject}
-            onUpdateObject={editor.updateObject}
-          />
-        </div>
+        {editor.state.map && (
+          <div className="left-panel">
+            <LayerPanel
+              layers={editor.getAllLayers()}
+              selectedLayerId={editor.state.selectedLayerId}
+              onSelectLayer={editor.setSelectedLayer}
+              onToggleVisibility={editor.toggleLayerVisibility}
+              onAddLayer={editor.addTileLayer}
+              onRemoveLayer={editor.removeLayer}
+            />
+            <ObjectPanel
+              objects={editor.getObjectsOnSelectedLayer()}
+              isObjectLayer={isObjectLayer}
+              objectType={editor.state.selectedObjectType}
+              onSelectObjectType={editor.setObjectType}
+              onDeleteObject={editor.deleteObject}
+              onUpdateObject={editor.updateObject}
+            />
+          </div>
+        )}
         <div className="canvas-area">
           {editor.state.map ? (
             <MapCanvas
@@ -157,34 +159,35 @@ export default function App() {
             </div>
           )}
         </div>
-        <div className="right-panel">
-          <Minimap
-            map={editor.state.map}
-            tilesetImages={editor.tilesetImages}
-            cameraX={editor.state.cameraX}
-            cameraY={editor.state.cameraY}
-            zoom={editor.state.zoom}
-            canvasWidth={canvasSize.width}
-            canvasHeight={canvasSize.height}
-            onCameraChange={(x, y) => editor.setCamera(x, y, editor.state.zoom)}
-          />
-          <Toolbar
-            selectedTool={editor.state.selectedTool}
-            onSelectTool={editor.setTool}
-            showGrid={editor.state.showGrid}
-            onToggleGrid={editor.toggleGrid}
-            zoom={editor.state.zoom}
-            onZoom={(z) => editor.setCamera(editor.state.cameraX, editor.state.cameraY, z)}
-            isObjectLayer={isObjectLayer}
-          />
-          <TilesetPanel
-            map={editor.state.map}
-            tilesetImages={editor.tilesetImages}
-            selectedTileId={editor.state.selectedTileId}
-            onSelectTile={editor.setSelectedTile}
-          />
-          
-        </div>
+        {editor.state.map && (
+          <div className="right-panel">
+            <Minimap
+              map={editor.state.map}
+              tilesetImages={editor.tilesetImages}
+              cameraX={editor.state.cameraX}
+              cameraY={editor.state.cameraY}
+              zoom={editor.state.zoom}
+              canvasWidth={canvasSize.width}
+              canvasHeight={canvasSize.height}
+              onCameraChange={(x, y) => editor.setCamera(x, y, editor.state.zoom)}
+            />
+            <Toolbar
+              selectedTool={editor.state.selectedTool}
+              onSelectTool={editor.setTool}
+              showGrid={editor.state.showGrid}
+              onToggleGrid={editor.toggleGrid}
+              zoom={editor.state.zoom}
+              onZoom={(z) => editor.setCamera(editor.state.cameraX, editor.state.cameraY, z)}
+              isObjectLayer={isObjectLayer}
+            />
+            <TilesetPanel
+              map={editor.state.map}
+              tilesetImages={editor.tilesetImages}
+              selectedTileId={editor.state.selectedTileId}
+              onSelectTile={editor.setSelectedTile}
+            />
+          </div>
+        )}
       </div>
       {showNewMap && (
         <NewMapDialog

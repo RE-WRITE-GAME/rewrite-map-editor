@@ -59,6 +59,12 @@ const OBJECT_TEMPLATES: Record<ObjectType, { name: string; width: number; height
       { name: 'respawnMax', type: 'int', value: 10000 },
     ],
   },
+  ramp: {
+    name: 'ramp',
+    width: 128,
+    height: 64,
+    properties: [{ name: 'direction', type: 'string', value: 'up-right' }],
+  },
 };
 
 export function useMapEditor() {
@@ -259,9 +265,12 @@ export function useMapEditor() {
 
     pushHistory(state.map);
     const template = OBJECT_TEMPLATES[state.selectedObjectType];
+    const objTypeStr = state.selectedObjectType === 'spawner' ? 'monster_spawner'
+      : state.selectedObjectType === 'ramp' ? 'ramp'
+      : '';
     addObjectToLayer(layer as TiledObjectLayer, {
       name: template.name,
-      type: state.selectedObjectType === 'spawner' ? 'monster_spawner' : '',
+      type: objTypeStr,
       width: template.width,
       height: template.height,
       x,

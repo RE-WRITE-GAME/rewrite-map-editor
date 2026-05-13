@@ -137,24 +137,49 @@ export function MapCanvas({ editor, onCanvasResize }: MapCanvasProps) {
           if (!obj.visible) continue;
 
           const isSelected = obj.id === selectedObjectId;
-          if (obj.type === 'monster_spawner') {
-            ctx.fillStyle = isSelected ? 'rgba(255, 100, 100, 0.4)' : 'rgba(255, 50, 50, 0.25)';
-            ctx.strokeStyle = isSelected ? '#ff6464' : '#ff3232';
-          } else if (obj.name.includes('portal')) {
-            ctx.fillStyle = isSelected ? 'rgba(100, 100, 255, 0.4)' : 'rgba(50, 50, 255, 0.25)';
-            ctx.strokeStyle = isSelected ? '#6464ff' : '#3232ff';
+
+          if (obj.type === 'ramp') {
+            // Render ramp as a filled triangle
+            const dir = (obj.properties?.find((p) => p.name === 'direction')?.value as string) ?? 'up-right';
+            ctx.fillStyle = isSelected ? 'rgba(255, 180, 0, 0.5)' : 'rgba(255, 140, 0, 0.3)';
+            ctx.strokeStyle = isSelected ? '#ffcc00' : '#ff9900';
+            ctx.lineWidth = 1 / zoom;
+            ctx.beginPath();
+            if (dir === 'up-right') {
+              ctx.moveTo(obj.x, obj.y + obj.height);
+              ctx.lineTo(obj.x + obj.width, obj.y + obj.height);
+              ctx.lineTo(obj.x + obj.width, obj.y);
+            } else {
+              ctx.moveTo(obj.x, obj.y + obj.height);
+              ctx.lineTo(obj.x + obj.width, obj.y + obj.height);
+              ctx.lineTo(obj.x, obj.y);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#fff';
+            ctx.font = `${10 / zoom}px monospace`;
+            ctx.fillText(`ramp (${dir})`, obj.x, obj.y - 2 / zoom);
           } else {
-            ctx.fillStyle = isSelected ? 'rgba(100, 255, 100, 0.4)' : 'rgba(50, 255, 50, 0.25)';
-            ctx.strokeStyle = isSelected ? '#64ff64' : '#32ff32';
+            if (obj.type === 'monster_spawner') {
+              ctx.fillStyle = isSelected ? 'rgba(255, 100, 100, 0.4)' : 'rgba(255, 50, 50, 0.25)';
+              ctx.strokeStyle = isSelected ? '#ff6464' : '#ff3232';
+            } else if (obj.name.includes('portal')) {
+              ctx.fillStyle = isSelected ? 'rgba(100, 100, 255, 0.4)' : 'rgba(50, 50, 255, 0.25)';
+              ctx.strokeStyle = isSelected ? '#6464ff' : '#3232ff';
+            } else {
+              ctx.fillStyle = isSelected ? 'rgba(100, 255, 100, 0.4)' : 'rgba(50, 255, 50, 0.25)';
+              ctx.strokeStyle = isSelected ? '#64ff64' : '#32ff32';
+            }
+
+            ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
+            ctx.lineWidth = 1 / zoom;
+            ctx.strokeRect(obj.x, obj.y, obj.width, obj.height);
+
+            ctx.fillStyle = '#fff';
+            ctx.font = `${10 / zoom}px monospace`;
+            ctx.fillText(obj.name, obj.x, obj.y - 2 / zoom);
           }
-
-          ctx.fillRect(obj.x, obj.y, obj.width, obj.height);
-          ctx.lineWidth = 1 / zoom;
-          ctx.strokeRect(obj.x, obj.y, obj.width, obj.height);
-
-          ctx.fillStyle = '#fff';
-          ctx.font = `${10 / zoom}px monospace`;
-          ctx.fillText(obj.name, obj.x, obj.y - 2 / zoom);
         }
       }
     }
